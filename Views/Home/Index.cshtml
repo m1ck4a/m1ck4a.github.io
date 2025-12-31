@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Письмо для Юли 🎄";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/newyear.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="snowfield"></div>
+
+    <div class="envelope">
+        <!-- Тело -->
+        <div class="body"></div>
+
+        <!-- Клапан -->
+        <div class="flap" id="flap">
+            <div class="ribbon" id="ribbon">
+                <div class="ribbon-bar"></div>
+                <div class="ribbon-tie"></div>
+                <div class="ribbon-wing left"></div>
+                <div class="ribbon-wing right"></div>
+            </div>
+        </div>
+
+        <!-- Лист -->
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <p id="text"></p>
+            </div>
+        </div>
+
+        <!-- НЕВИДИМАЯ КНОПКА — ПОКРЫВАЕТ ВСЮ ОБЛАСТЬ КОНВЕРТА -->
+        <button id="open-button" class="open-button"></button>
+    </div>
+
+    <script src="~/js/newyear.js"></script>
+</body>
+</html>

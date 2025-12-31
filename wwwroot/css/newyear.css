@@ -1,0 +1,213 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(160deg, #0c2e38, #1a4b5c, #081d27);
+    min-height: 100vh;
+    font-family: 'Quicksand', 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Снег */
+#snowfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* === Конверт === */
+.envelope {
+    position: relative;
+    width: 280px;
+    height: 180px;
+    margin: 0 auto;
+    /* Убираем overflow: hidden — листок должен выезжать! */
+}
+
+/* Тело конверта */
+.envelope .body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #c0392b;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+/* Клапан — теперь просто исчезает */
+.envelope .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #922b21;
+    clip-path: polygon(0 0, 100% 0, 50% 60%);
+    z-index: 3;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.envelope .flap.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+/* енточка — явно, с отладкой */
+.ribbon {
+    position: absolute;
+    bottom: -24px; /* ВЫШЕ: чтобы не скрывалась под тенью */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 10; /* САМЫЙ ВЕРХ — клик и видимость гарантированы */
+}
+
+/* Горизонтальная часть банта */
+.ribbon-bar {
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    background: #f1c40f;
+    border-radius: 4px;
+    top: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Вертикальная "ножка" */
+.ribbon-tie {
+    position: absolute;
+    width: 6px;
+    height: 20px;
+    background: #d4af37;
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
+    border-radius: 3px;
+}
+
+/* Левый и правый "хвостики" банта */
+.ribbon-wing {
+    position: absolute;
+    width: 20px;
+    height: 8px;
+    background: #d4af37;
+    top: 0;
+    border-radius: 4px;
+}
+
+.ribbon-wing.left {
+    left: -18px;
+    transform: rotate(-30deg);
+}
+
+.ribbon-wing.right {
+    right: -18px;
+    transform: rotate(30deg);
+}
+
+/* Листочек — выезжает ВВЕРХ, может выходить за пределы */
+.letter {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    width: 90%;
+    max-width: 260px;
+    background: #fef9e7;
+    border: 2px dashed #d4af37;
+    border-radius: 10px;
+    padding: 18px;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0;
+    z-index: 2;
+    transition: all 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.letter.show {
+    transform: translateX(-50%) translateY(-20px); /* ⭐️ Выезжает ВВЕРХ, частично выходит за конверт */
+    opacity: 1;
+}
+
+/* Запрещаем выделение текста */
+.letter-content {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Стили для полосы прокрутки (Firefox) */
+.letter::-webkit-scrollbar {
+    width: 6px;
+}
+
+.letter::-webkit-scrollbar-track {
+    background: #fef9e7;
+    border-radius: 10px;
+}
+
+.letter::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 10px;
+}
+
+.letter::-webkit-scrollbar-thumb:hover {
+    background: #b8860b;
+}
+/* Невидимая кнопка */
+.open-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0;
+}
+
+.open-button:hover {
+    opacity: 0.05; /* Очень слабый фон при наведении — для отладки */
+}
+
+/* Анимация снега */
+@keyframes fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0;
+    }
+}
