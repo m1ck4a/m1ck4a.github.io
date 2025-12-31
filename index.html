@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>С Новым Годом, Юля! 🎄</title>
+    <style>
+        /* ВСТАВЬ СЮДА ВЕСЬ КОНТЕНТ ИЗ wwwroot/css/style.css */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #0c2e38, #1a4b5c, #081d27);
+            min-height: 100vh;
+            font-family: 'Quicksand', 'Segoe UI', sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #snowfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .envelope {
+            position: relative;
+            width: 280px;
+            height: 180px;
+            margin: 0 auto;
+        }
+
+        .envelope .body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #c0392b;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .envelope .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #922b21;
+            clip-path: polygon(0 0, 100% 0, 50% 60%);
+            z-index: 3;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .envelope .flap.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: 90%;
+            max-width: 260px;
+            background: #fef9e7;
+            border: 2px dashed #d4af37;
+            border-radius: 10px;
+            padding: 18px;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            text-align: center;
+            opacity: 0;
+            z-index: 2;
+            transition: all 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .letter.show {
+            transform: translateX(-50%) translateY(-20px);
+            opacity: 1;
+        }
+
+        .letter-content {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .open-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+        }
+
+        /* Снег */
+        @keyframes fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.9; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="snowfield"></div>
+
+    <div class="envelope">
+        <div class="body"></div>
+
+        <div class="flap" id="flap">
+            <div class="ribbon" id="ribbon">
+                <div class="ribbon-bar"></div>
+                <div class="ribbon-tie"></div>
+                <div class="ribbon-wing left"></div>
+                <div class="ribbon-wing right"></div>
+            </div>
+        </div>
+
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <p id="text"></p>
+            </div>
+        </div>
+
+        <button id="open-button" class="open-button"></button>
+    </div>
+
+    <script>
+        // ВСТАВЬ СЮДА ВЕСЬ КОНТЕНТ ИЗ wwwroot/js/script.js
+        document.addEventListener('DOMContentLoaded', () => {
+            const flap = document.getElementById('flap');
+            const letter = document.getElementById('letter');
+            const textEl = document.getElementById('text');
+            const openButton = document.getElementById('open-button');
+
+            const message = `Дорогая Юля! 🎄
+
+Пусть 2026-й будет годом:
+✨ тёплых встреч и искренних улыбок,
+🕯️ домашнего уюта и утреннего кофе с видом на снег,
+🌟 смелых решений — и лёгкости в каждом шаге.
+
+Ты — как новогоднее чудо: настоящее, настоящее, настоящее.
+С Новым Годом, моя волшебница! 🎇
+
+С любовью,
+Тот, кто тебя ждал 💌`;
+
+            // ❄ Снег
+            for (let i = 0; i < 20; i++) {
+                const flake = document.createElement('div');
+                flake.style.position = 'absolute';
+                flake.style.top = '-10px';
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.width = (Math.random() * 6 + 4) + 'px';
+                flake.style.height = flake.style.width;
+                flake.style.borderRadius = '50%';
+                flake.style.background = '#fff';
+                flake.style.opacity = Math.random() * 0.5 + 0.3;
+                flake.style.boxShadow = '0 0 3px rgba(255,255,255,0.8)';
+                flake.style.animation = `fall ${Math.random() * 6 + 4}s linear ${Math.random() * 3}s infinite`;
+                document.getElementById('snowfield').appendChild(flake);
+            }
+
+            // 🖱️ Обработчик клика
+            openButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (openButton.dataset.clicked === 'true') return;
+
+                openButton.dataset.clicked = 'true';
+                openButton.style.pointerEvents = 'none';
+
+                flap.classList.add('hidden');
+
+                setTimeout(() => {
+                    letter.classList.add('show');
+                    typeText(textEl, message, 65);
+                }, 300);
+            });
+
+            openButton.addEventListener('mouseenter', () => {
+                document.body.style.cursor = 'pointer';
+            });
+            openButton.addEventListener('mouseleave', () => {
+                document.body.style.cursor = 'default';
+            });
+        });
+
+        function typeText(el, text, delay = 60) {
+            let i = 0;
+            el.textContent = '';
+            const iv = setInterval(() => {
+                if (i < text.length) {
+                    el.textContent += text[i];
+                    i++;
+                } else {
+                    clearInterval(iv);
+                }
+            }, delay);
+        }
+    </script>
+
+    <!-- Стили ленточки (можно встроить в <style>, но для ясности — отдельно) -->
+    <style>
+        .ribbon {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 36px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .ribbon-bar {
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: #f1c40f;
+            border-radius: 4px;
+            top: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .ribbon-tie {
+            position: absolute;
+            width: 6px;
+            height: 20px;
+            background: #d4af37;
+            left: 50%;
+            top: 8px;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+
+        .ribbon-wing {
+            position: absolute;
+            width: 20px;
+            height: 8px;
+            background: #d4af37;
+            top: 0;
+            border-radius: 4px;
+        }
+
+        .ribbon-wing.left {
+            left: -18px;
+            transform: rotate(-30deg);
+        }
+
+        .ribbon-wing.right {
+            right: -18px;
+            transform: rotate(30deg);
+        }
+    </style>
+</body>
+</html>
